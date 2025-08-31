@@ -531,6 +531,20 @@
         const el = $("tankHeightInput");
         if (el) el.value = tankHeight !== null && tankHeight !== undefined ? tankHeight : "";
       });
+      database.ref("sensors/moisture").on("value", snapshot => {
+        if (!snapshot.exists()) return;
+        const moisture = snapshot.val();
+        if ($("moistureValue")) $("moistureValue").innerText = moisture + "%";
+        if (typeof moisture === "number" && (moisture < 10 || moisture > 40)) {
+          showMessage(`⚠ Soil moisture not optimal: ${moisture}%`);
+        }
+      });
+
+      database.ref("sensors/waterLevel").on("value", snapshot => {
+        if (!snapshot.exists()) return;
+        const level = snapshot.val();
+        if ($("waterLevel")) $("waterLevel").innerText = level;
+      });
 
       console.log("AgroNova JS ready ✅");
     });
